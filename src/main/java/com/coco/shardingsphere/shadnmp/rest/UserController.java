@@ -29,5 +29,10 @@ public class UserController {
         return R.success("查询成功",page);
     }
 
+    @PutMapping
+    public R updateUser(@RequestBody User user) {
+        userService.updateById(user);
+        return R.success();
+    }
 
 }
