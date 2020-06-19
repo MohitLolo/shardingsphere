@@ -74,13 +74,12 @@ spring:
           table-strategy:
             inline:
               sharding-column: id
-              algorithm-expression: user$->{id % 2}
+              algorithm-expression: user$->{ id % 2}
         order:
           actual-data-nodes: shadnmp$->{0..1}.order$->{0..1}
           table-strategy:
             inline:
               sharding-column: id
-              algorithm-expression: order$->{id % 2}
-
+              algorithm-expression: order$->{id.hashCode() % 2}
 
 

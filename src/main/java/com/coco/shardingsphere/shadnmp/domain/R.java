@@ -21,6 +21,10 @@ public class R {
         return new R().setMsg(msg).setCode(0);
     }
 
+    public static R success(Object data) {
+        return R.success().setData(data);
+    }
+
     public static R success(String msg, Object data) {
         return new R().setMsg(msg).setCode(0).setData(data);
     }

@@ -29,6 +29,11 @@ public class UserController {
         return R.success("查询成功",page);
     }
 
+    @GetMapping("listByName/{pageNum}/{pageSize}")
+    public R listByName(@PathVariable Long pageSize,@PathVariable Long pageNum,@RequestParam("name")String name) {
+        return userService.listByName(pageNum,pageSize,name);
+    }
+
     @PutMapping
     public R updateUser(@RequestBody User user) {
         userService.updateById(user);
