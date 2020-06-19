@@ -1,0 +1,86 @@
+# 数据库连接池配置
+spring:
+  datasource:
+    # hikari
+    hikari:
+      minimum-idle: 10
+      maximum-pool-size: 20
+      auto-commit: true
+      idle-timeout: 30000
+      pool-name: ShardingHikariCP
+      max-lifetime: 1800000
+      connection-timeout: 30000
+      connection-test-query: SELECT 1
+    # druid
+#    druid:
+#      # 初始连接数
+#      initialSize: 5
+#      # 最小连接池数量
+#      minIdle: 10
+#      # 最大连接池数量
+#      maxActive: 20
+#      # 配置获取连接等待超时的时间
+#      maxWait: 60000
+#      # 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
+#      timeBetweenEvictionRunsMillis: 60000
+#      # 配置一个连接在池中最小生存的时间，单位是毫秒
+#      minEvictableIdleTimeMillis: 300000
+#      # 配置一个连接在池中最大生存的时间，单位是毫秒
+#      maxEvictableIdleTimeMillis: 900000
+#      # 配置检测连接是否有效
+#      validationQuery: SELECT 1 FROM DUAL
+#      testWhileIdle: true
+#      testOnBorrow: false
+#      testOnReturn: false
+#      webStatFilter:
+#        enabled: true
+#      filter:
+#        stat:
+#          enabled: true
+#          # 慢SQL记录
+#          log-slow-sql: true
+#          slow-sql-millis: 1000
+#          merge-sql: true
+#        wall:
+#          config:
+#            multi-statement-allow: true
+    initialization-mode: always
+  # sharding-jdbc 配置
+  shardingsphere:
+    datasource:
+      names: shadnmp0,shadnmp1
+      shadnmp0:
+        type: com.zaxxer.hikari.HikariDataSource
+#        type: com.alibaba.druid.pool.DruidDataSource
+        driverClassName: com.mysql.cj.jdbc.Driver
+        jdbcUrl: jdbc:mysql://localhost:3306/shadnmp0?useSSL=true&verifyServerCertificate=false&serverTimezone=Asia/Shanghai&allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8
+        username: root
+        password: root
+      shadnmp1:
+        type: com.zaxxer.hikari.HikariDataSource
+#        type: com.alibaba.druid.pool.DruidDataSource
+        driverClassName: com.mysql.cj.jdbc.Driver
+        jdbcUrl: jdbc:mysql://localhost:3306/shadnmp1?useSSL=true&verifyServerCertificate=false&serverTimezone=Asia/Shanghai&allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8
+        username: root
+        password: root
+    sharding:
+      default-database-strategy:
+        inline:
+          sharding-column: id
+          algorithm-expression: shadnmp$->{id % 2}
+      tables:
+        user:
+          actual-data-nodes: shadnmp$->{0..1}.user$->{0..1}
+          table-strategy:
+            inline:
+              sharding-column: id
+              algorithm-expression: user$->{id % 2}
+        order:
+          actual-data-nodes: shadnmp$->{0..1}.order$->{0..1}
+          table-strategy:
+            inline:
+              sharding-column: id
+              algorithm-expression: order$->{id % 2}
+
+
+

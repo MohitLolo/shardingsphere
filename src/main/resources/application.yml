@@ -1,0 +1,20 @@
+spring:
+  profiles:
+    active: sharding
+  jackson:
+    default-property-inclusion: always
+    time-zone: GMT+8
+    date-format: com.fasterxml.jackson.databind.util.StdDateFormat
+
+# mybatis-plus
+mybatis-plus:
+  mapper-locations: classpath:mybatis/**/*Mapper.xml
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    cache-enabled: true
+    use-generated-keys: true
+    default-executor-type: reuse
+    call-setters-on-nulls: true
+  global-config:
+    db-config:
+      id-type: assign_id
